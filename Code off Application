@@ -1,0 +1,274 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    int roll, marks, height;
+    string name;
+    Node *left, *right;
+
+    Node(int r, string n, int m) {
+        roll = r;
+        name = n;
+        marks = m;
+        height = 1;
+        left = right = NULL;
+    }
+};
+
+int height(Node* n) {
+    return n == NULL ? 0 : n->height;
+}
+
+int maxValue(int a, int b) {
+    return a > b ? a : b;
+}
+
+int balance(Node* n) {
+    return n == NULL ? 0 :
+        height(n->left) - height(n->right);
+}
+
+Node* rightRotate(Node* y) {
+    Node* x = y->left;
+    Node* t = x->right;
+
+    x->right = y;
+    y->left = t;
+
+    y->height = 1 + maxValue(height(y->left),
+                             height(y->right));
+    x->height = 1 + maxValue(height(x->left),
+                             height(x->right));
+
+    return x;
+}
+
+Node* leftRotate(Node* x) {
+    Node* y = x->right;
+    Node* t = y->left;
+
+    y->left = x;
+    x->right = t;
+
+    x->height = 1 + maxValue(height(x->left),
+                             height(x->right));
+    y->height = 1 + maxValue(height(y->left),
+                             height(y->right));
+
+    return y;
+}
+
+Node* insert(Node* root, int r, string n, int m) {
+    if (root == NULL)
+        return new Node(r, n, m);
+
+    if (r < root->roll)
+        root->left = insert(root->left, r, n, m);
+    else if (r > root->roll)
+        root->right = insert(root->right, r, n, m);
+    else {
+        cout << "Roll number already exists!\n";
+        return root;
+    }
+
+    root->height = 1 + maxValue(height(root->left),
+                                height(root->right));
+
+    int b = balance(root);
+
+    if (b > 1 && r < root->left->roll)
+        return rightRotate(root);
+
+    if (b < -1 && r > root->right->roll)
+        return leftRotate(root);
+
+    if (b > 1 && r > root->left->roll) {
+        root->left = leftRotate(root->left);
+        return rightRotate(root);
+    }
+
+    if (b < -1 && r < root->right->roll) {
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+
+    return root;
+}
+
+Node* search(Node* root, int r) {
+    if (root == NULL || root->roll == r)
+        return root;
+
+    if (r < root->roll)
+        return search(root->left, r);
+
+    return search(root->right, r);
+}
+
+Node* smallest(Node* root) {
+    while (root->left != NULL)
+        root = root->left;
+
+    return root;
+}
+
+Node* deleteNode(Node* root, int r) {
+    if (root == NULL)
+        return root;
+
+    if (r < root->roll)
+        root->left = deleteNode(root->left, r);
+    else if (r > root->roll)
+        root->right = deleteNode(root->right, r);
+    else {
+        if (root->left == NULL || root->right == NULL) {
+            Node* temp = root->left ?
+                         root->left : root->right;
+            delete root;
+            return temp;
+        }
+
+        Node* temp = smallest(root->right);
+        root->roll = temp->roll;
+        root->name = temp->name;
+        root->marks = temp->marks;
+
+        root->right = deleteNode(root->right, temp->roll);
+    }
+
+    root->height = 1 + maxValue(height(root->left),
+                                height(root->right));
+
+    int b = balance(root);
+
+    if (b > 1 && balance(root->left) >= 0)
+        return rightRotate(root);
+
+    if (b > 1 && balance(root->left) < 0) {
+        root->left = leftRotate(root->left);
+        return rightRotate(root);
+    }
+
+    if (b < -1 && balance(root->right) <= 0)
+        return leftRotate(root);
+
+    if (b < -1 && balance(root->right) > 0) {
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+
+    return root;
+}
+
+void display(Node* root, int space = 0) {
+    if (root == NULL)
+        return;
+
+    space += 6;
+
+    display(root->right, space);
+
+    cout << "\n";
+    for (int i = 6; i < space; i++)
+        cout << " ";
+
+    cout << root->roll << " - " << root->name
+         << " (" << root->marks << " marks)\n";
+
+    display(root->left, space);
+}
+
+int main() {
+    Node* root = NULL;
+    int choice, roll, marks;
+    string name;
+
+    do {
+        cout << "\n===== STUDENT RECORD SYSTEM =====\n";
+        cout << "1. Insert Student\n";
+        cout << "2. Search Student\n";
+        cout << "3. Delete Student\n";
+        cout << "4. Display AVL Tree\n";
+        cout << "5. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter Roll Number: ";
+                cin >> roll;
+
+                cout << "Enter Student Name: ";
+                cin >> name;
+
+                cout << "Enter Marks: ";
+                cin >> marks;
+
+                if (marks < 0 || marks > 100) {
+                    cout << "Marks must be between 0 and 100!\n";
+                    break;
+                }
+
+                if (search(root, roll) != NULL) {
+                    cout << "Roll number already exists!\n";
+                } else {
+                    root = insert(root, roll, name, marks);
+                    cout << "Student inserted successfully!\n";
+                    cout << "\nAVL Tree after insertion:\n";
+                    display(root);
+                    cout << "\n";
+                }
+                break;
+
+            case 2: {
+                cout << "Enter Roll Number to Search: ";
+                cin >> roll;
+
+                Node* p = search(root, roll);
+
+                if (p != NULL) {
+                    cout << "Student Found!\n";
+                    cout << "Roll Number: " << p->roll << "\n";
+                    cout << "Name: " << p->name << "\n";
+                    cout << "Marks: " << p->marks << "\n";
+                } else {
+                    cout << "Student not found!\n";
+                }
+                break;
+            }
+
+            case 3:
+                cout << "Enter Roll Number to Delete: ";
+                cin >> roll;
+
+                if (search(root, roll) == NULL) {
+                    cout << "Student not found!\n";
+                } else {
+                    root = deleteNode(root, roll);
+                    cout << "Student deleted successfully!\n";
+                    cout << "\nAVL Tree after deletion:\n";
+                    display(root);
+                    cout << "\n";
+                }
+                break;
+
+            case 4:
+                cout << "\nAVL Tree (Sideways):\n";
+                display(root);
+                cout << "\n";
+                break;
+
+            case 5:
+                cout << "Program ended.\n";
+                break;
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
