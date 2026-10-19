@@ -11,7 +11,7 @@ struct Node {
     string stockName;     
     float stockPrice;     
     int height;           
-    Node *left, *right;   
+    Node *left, *right;  
 
     // Constructor: Initialize a new stock node
     Node(int id, string name, float price) {
