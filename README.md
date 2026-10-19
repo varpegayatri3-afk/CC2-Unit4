@@ -1,3 +1,4 @@
+## Problem Statment
 Develop a stock ticker application using an AVL tree to display the tree sideways after each stock ID insertion.## 1. Problem Statement
 
 Managing stock records using traditional sequential data structures, such as static arrays, can create limitations due to fixed memory allocation and costly insertion and searching operations. As the number of stock records increases, maintaining and organizing the data becomes more difficult.
