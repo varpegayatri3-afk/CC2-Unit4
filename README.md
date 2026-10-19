@@ -1,30 +1,28 @@
-# Student Record Management System Using AVL Tree
+Develop a stock ticker application using an AVL tree to display the tree sideways after each stock ID insertion.## 1. Problem Statement
 
-## Problem Statement
-To develop a Student Record Management System using an AVL Tree in C++. The system stores student roll numbers, names, and marks. It supports inserting, searching, deleting, and displaying student records while maintaining a balanced tree.
+Managing stock records using traditional sequential data structures, such as static arrays, can create limitations due to fixed memory allocation and costly insertion and searching operations. As the number of stock records increases, maintaining and organizing the data becomes more difficult.
 
-## Objectives
-1. To implement an AVL tree in C++.
-2. To store student roll numbers, names, and marks.
-3. To insert, search, and delete student records.
-4. To maintain tree balance using rotations.
-5. To display the AVL tree sideways after insertion.
+The objective of this project is to develop a Stock Ticker Application using an AVL Tree in C++ to store and manage Stock ID, Stock Name, and Stock Price. The application supports stock insertion, searching, and display operations while maintaining tree balance through rotations. It also displays the AVL tree sideways to visualize the hierarchical arrangement of stock records.
 
-## Solution
-The application uses an AVL tree to manage student records efficiently. Each node stores the student's roll number, name, marks, and height. The program provides a menu-driven interface for inserting, searching, deleting, and displaying records. The AVL tree automatically balances itself after insertion and deletion.
+## 2. Objectives
 
-## Features
-- Insert student records
-- Search by roll number
-- Delete student records
-- Display the AVL tree sideways
-- Store student marks from 0 to 100
-- Automatically balance the tree
+- To implement an AVL Tree using C++ for efficient stock record management.
+- To store Stock ID, Stock Name, and Stock Price in dynamically allocated nodes.
+- To maintain tree balance using LL, RR, LR, and RL rotations.
+- To provide efficient insertion and searching of stock records.
+- To display stock records in ascending order of Stock ID using inorder traversal.
+- To visualize the hierarchical structure through sideways tree display.
+- To apply pointers, dynamic memory allocation, recursion, and tree traversal concepts.
 
-## Technology Used
-- Programming Language: C++
-- Data Structure: AVL Tree
-- IDE: Visual Studio Code
+## 3. Technology Objectives
 
-## Version
-v1.0.0 — Initial Release
+- Programming Language: C++ for implementing the stock management application.
+- Data Structure: AVL Tree for storing stock records in a self-balancing binary search tree.
+- Dynamic Memory Allocation: Use of `new` to create stock nodes dynamically.
+- Pointers: Use of left and right pointers to connect tree nodes.
+- Recursion: Used in insertion, searching, traversal, and tree display functions.
+- AVL Rotations: Implementation of LL, RR, LR, and RL rotations to maintain balance.
+- Development Environment: Visual Studio Code with a C++ compiler such as GCC (`g++`).
+- User Interface: A menu-driven console interface for inserting, searching, and displaying stock records.
+
+Expected outcome: A working C++ application that organizes stock records efficiently using an AVL tree. Stock prices are entered manually; live stock market data is not included in the current implementation.
